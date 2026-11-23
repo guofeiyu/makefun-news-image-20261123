@@ -109,6 +109,22 @@ class Canvas:
     def text_w(self, s, scale):
         return len(s) * 6 * scale
 
+    def circle(self, cx, cy, r, color):
+        for yy in range(cy - r - 1, cy + r + 2):
+            for xx in range(cx - r - 1, cx + r + 2):
+                d = ((xx - cx) ** 2 + (yy - cy) ** 2) ** 0.5
+                if abs(d - r) <= 1.6:
+                    self.rect(xx, yy, 2, 2, color)
+
+    def chord(self, cx, cy, r, dy, color):
+        half = int((r * r - dy * dy) ** 0.5)
+        self.rect(cx - half, cy + dy - 1, half * 2, 2, color)
+
+    def meridian(self, cx, cy, r, color):
+        for dy in range(-r, r + 1, 2):
+            half = int((r * r - dy * dy) ** 0.5) // 3
+            self.rect(cx - half, cy + dy, half * 2, 2, color)
+
     def wrap(self, s, scale, max_w):
         lines, cur = [], ""
         for word in s.split():
@@ -148,6 +164,13 @@ def draw():
     c.rect(0, 0, W, 140, NAVY)
     c.text(48, 22, "THE WORLD IN ONE PICTURE", 5, WHITE)
     c.text(48, 72, "MONDAY, 23 NOVEMBER 2026", 5, YELLOW)
+    c.text(48, 112, "SIX STORIES - ONE DAY", 2, SOFT)
+    # small globe, right of masthead
+    c.circle(918, 70, 44, YELLOW)
+    c.chord(918, 70, 44, -22, WHITE)
+    c.chord(918, 70, 44, 0, WHITE)
+    c.chord(918, 70, 44, 22, WHITE)
+    c.meridian(918, 70, 44, WHITE)
     c.rect(0, 140, W, 6, RED)
 
     # Lead story: COP31
